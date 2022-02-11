@@ -10,23 +10,42 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
     const api_key = process.env.REACT_APP_API_KEY;
+    const validateEmail = (e) => {
+        var filter = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
+        return String(e).search(filter) !== -1;
+    }
     const loginForm = (e) => {
         e.preventDefault();
-        const user = {
-            emailAddress: email,
-            password: password
+        if (email.trim() === 0 || !validateEmail(email)) {
+            setError("Enter valid Email")
+            setTimeout(() => {
+                setError(null)
+            }, 2500);
         }
-        axios.post(`${api_key}/users/login`, user)
-            .then(response => {
-                if (response.data.length === 0) {
-                    setError("Invalid Username or Password")
-                }
-                else {
-                    localStorage.setItem("userId", response.data[0].id)
-                    localStorage.setItem("role", response.data[0].role.roleName)
-                    navigate("/")
-                }
-            });
+        else if (password.trim() === "") {
+            setError("Enter valid password")
+            setTimeout(() => {
+                setError(null)
+            }, 2500);
+        }
+        else {
+            const user = {
+                emailAddress: email.trim(),
+                password: password.trim()
+            }
+            axios.post(`${api_key}/users/login`, user)
+                .then(response => {
+                    if (response.data.length === 0) {
+                        setError("Invalid Username or Password")
+                    }
+                    else {
+                        localStorage.setItem("userId", response.data[0].id)
+                        localStorage.setItem("role", response.data[0].role.roleName)
+                        navigate("/")
+                    }
+                });
+        }
+
     }
     useEffect(() => {
         if (localStorage.getItem("userId")) {
@@ -42,11 +61,11 @@ export default function Login() {
                 <h3 className='text-center'>Login</h3>
                 <Form.Group className="mb-3">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control value={email} type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} required />
+                    <Form.Control value={email} type="text" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control value={password} type="password" placeholder="Enter password" onChange={(e) => setPassword(e.target.value)} required />
+                    <Form.Control value={password} type="password" placeholder="Enter password" onChange={(e) => setPassword(e.target.value)} />
                 </Form.Group>
                 <div className='text-center mt-4'>
                     <Button variant="primary" type="submit">
