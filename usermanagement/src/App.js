@@ -10,12 +10,7 @@ import CreatePassword from "./components/authComponent/CreatePassword";
 
 function App() {
   const navigate = useNavigate();
-  useEffect(() => {
-    if (!localStorage.getItem("userId")) {
-      navigate("/login");
-    }
-    //eslint-disable-next-line
-  }, []);
+  
 
   return (
     <React.Fragment>
@@ -24,7 +19,7 @@ function App() {
         <Route path="/" element={<UserDetails />} />
         <Route exact path="login" element={<Login />} />
         <Route exact path="register" element={<NewUser />} />
-        <Route exact path="createpassword/:userid" element={<CreatePassword />} />
+        <Route exact path="createpassword/:userId" element={<CreatePassword />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>
     </React.Fragment>

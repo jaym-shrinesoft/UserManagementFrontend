@@ -36,12 +36,20 @@ export default function Login() {
             axios.post(`${api_key}/users/login`, user)
                 .then(response => {
                     if (response.data.length === 0) {
-                        setError("Invalid Username or Password")
+                        setError("Invalid Username or Password.")
                     }
                     else {
-                        localStorage.setItem("userId", response.data[0].id)
-                        localStorage.setItem("role", response.data[0].role.roleName)
-                        navigate("/")
+                        if (response.data[0].status === "active") {
+                            localStorage.setItem("userId", response.data[0].id)
+                            localStorage.setItem("role", response.data[0].role.roleName)
+                            navigate("/")
+                        }
+                        else {
+                            setError("User is not active, Please check your email to active your account.")
+                            setTimeout(() => {
+                                setError(null)
+                            }, 5000);
+                        }
                     }
                 });
         }

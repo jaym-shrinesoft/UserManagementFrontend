@@ -20,6 +20,7 @@ export default function NewUser() {
 
     const addUser = (e) => {
         e.preventDefault();
+        setError("Registration in progress. Please wait")
         if (username.trim() === "") {
             setError("Please enter username");
             setTimeout(() => {
@@ -34,12 +35,6 @@ export default function NewUser() {
         }
         else if (!validateEmail(email) || email.trim()==="") {
             setError("Please enter valid Email");
-            setTimeout(() => {
-                setError(null)
-            }, 2500);
-        }
-        else if(password.trim() === ""){
-            setError("Please enter your password");
             setTimeout(() => {
                 setError(null)
             }, 2500);
@@ -103,10 +98,10 @@ export default function NewUser() {
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type="text" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)}  />
                 </Form.Group>
-                <Form.Group className="mb-3">
+                {/* <Form.Group className="mb-3">
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)}  />
-                </Form.Group>
+                </Form.Group> */}
                 <Form.Group>
                     <Form.Label>Select Role</Form.Label>
                     <Form.Select aria-label="Default select example" onChange={(e) => selRole(e.target.value)}>
