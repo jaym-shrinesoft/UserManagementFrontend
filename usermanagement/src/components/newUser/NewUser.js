@@ -49,7 +49,7 @@ export default function NewUser() {
                     roleName: role.trim()
                 }
             }
-            axios.post(`${api_key}/users/create`, user)
+            axios.post(`${api_key}/auth/create`, user)
                 .then(response => {
                     if (response.data === "Duplicate") {
                         setError("username or email already exists")

@@ -33,15 +33,18 @@ export default function Login() {
                 emailAddress: email.trim(),
                 password: password.trim()
             }
-            axios.post(`${api_key}/users/login`, user)
+            axios.post(`${api_key}/auth/login`, user)
                 .then(response => {
+                    console.log(response.data);
                     if (response.data.length === 0) {
                         setError("Invalid Username or Password.")
                     }
                     else {
-                        if (response.data[0].status === "active") {
-                            localStorage.setItem("userId", response.data[0].id)
-                            localStorage.setItem("role", response.data[0].role.roleName)
+                        if (response.data.status === "active") {
+                            console.log(response)
+                            localStorage.setItem("userId", response.data.userId)
+                            localStorage.setItem("role", response.data.roleName)
+                            localStorage.setItem("jwt", response.data.token)
                             navigate("/")
                         }
                         else {

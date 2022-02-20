@@ -13,6 +13,7 @@ export default function UserTable() {
     const [deleteMessage, setDeleteMessage] = useState(null)
     const [show, setShow] = useState(false);
     const [deleteId, setdeleteId] = useState(null)
+    const [jwtToken, setjwtToken] = useState(null)
     const handleClose = () => setShow(false);
     const handleShow = (userId, userName) => {
         setdeleteId(userId)
@@ -22,30 +23,39 @@ export default function UserTable() {
     const api_key = process.env.REACT_APP_API_KEY;
 
     const deleteItem = (id) => {
-        axios.delete(`${api_key}/users/delete/${id}`)
+        axios.delete(`${api_key}/users/delete/${id}`, { 'headers': { 'Authorization': jwtToken } })
         setDeleteMessage(null)
     }
 
     const logout = () => {
         localStorage.removeItem("userId");
         localStorage.removeItem("role");
+        localStorage.removeItem("jwt");
         navigate("/login");
     }
 
     useEffect(() => {
-        axios.get(`${api_key}/users/user/${localStorage.getItem("userId")}`)
-            .then(response => {
-                setcanAdd(response.data.role.roleName !== "Level 1")
-                setCanDelete(response.data.role.roleName === "Level 3")
-                setLocalUser(response.data)
-            });
+        if (localStorage.getItem("jwt")) {
+            const AuthToken = "Bearer " + localStorage.getItem("jwt");
+            setjwtToken(AuthToken);
+            axios.get(`${api_key}/users/user/${localStorage.getItem("userId")}`, { 'headers': { 'Authorization': AuthToken } })
+                .then(response => {
+                    setcanAdd(response.data.role.roleName !== "Level 1")
+                    setCanDelete(response.data.role.roleName === "Level 3")
+                    setLocalUser(response.data)
+                });
+        }
         return () => {
             setUsers([])
         }
         // eslint-disable-next-line
     }, []);
     useEffect(() => {
-        axios.get(`${api_key}/users/getAll`).then(response => setUsers(response.data));
+        if (localStorage.getItem("jwt")) {
+            const AuthToken = "Bearer " + localStorage.getItem("jwt");
+            setjwtToken(AuthToken);
+            axios.get(`${api_key}/users/getAll`, { 'headers': { 'Authorization': AuthToken } }).then(response => setUsers(response.data));
+        }
         // eslint-disable-next-line
     }, [users]);
     return <React.Fragment>

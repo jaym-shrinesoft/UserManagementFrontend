@@ -30,7 +30,7 @@ export default function CreatePassword() {
         }
     }
     useEffect(() => {
-        if (localStorage.getItem("userId")) {
+        if (localStorage.getItem("jwt")) {
             navigate("/");
         }
         else {
