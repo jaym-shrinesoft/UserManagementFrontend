@@ -43,6 +43,10 @@ export default function UserTable() {
                     setcanAdd(response.data.role.roleName !== "Level 1")
                     setCanDelete(response.data.role.roleName === "Level 3")
                     setLocalUser(response.data)
+                }).catch(e => {
+                    localStorage.removeItem("jwt")
+                    localStorage.removeItem("userId")
+                    localStorage.removeItem("role")
                 });
         }
         return () => {
@@ -54,7 +58,13 @@ export default function UserTable() {
         if (localStorage.getItem("jwt")) {
             const AuthToken = "Bearer " + localStorage.getItem("jwt");
             setjwtToken(AuthToken);
-            axios.get(`${api_key}/users/getAll`, { 'headers': { 'Authorization': AuthToken } }).then(response => setUsers(response.data));
+            axios.get(`${api_key}/users/getAll`, { 'headers': { 'Authorization': AuthToken } })
+            .then(response => setUsers(response.data))
+            .catch(e => {
+                localStorage.removeItem("jwt")
+                localStorage.removeItem("userId")
+                localStorage.removeItem("role")
+            });
         }
         // eslint-disable-next-line
     }, [users]);

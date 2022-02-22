@@ -54,6 +54,11 @@ export default function Login() {
                             }, 5000);
                         }
                     }
+                }).catch(e => {
+                    setError("Enter valid Email or Password")
+                            setTimeout(() => {
+                                setError(null)
+                            }, 5000);
                 });
         }
 
