@@ -20,7 +20,7 @@ export default function CreatePassword() {
             }, 2000);
         }
         else {
-            axios.patch(`${api_key}/users/updatepasssword/${params.userId}`, { password: confirmPassword }).then(res => {
+            axios.patch(`${api_key}/auth/updatepasssword/${params.userId}`, { password: confirmPassword }).then(res => {
                 setError("Password is created, Redirecting to login page")
                 setTimeout(() => {
                     navigate("/login")
@@ -32,14 +32,6 @@ export default function CreatePassword() {
     useEffect(() => {
         if (localStorage.getItem("jwt")) {
             navigate("/");
-        }
-        else {
-            axios.get(`${api_key}/users/user/${params.userId}`).then(res => {
-                console.log(res.data.status);
-                if (res.data.status === "active") {
-                    navigate("/")
-                }
-            })
         }
         //eslint-disable-next-line 
     }, [])

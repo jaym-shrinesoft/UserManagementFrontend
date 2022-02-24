@@ -40,19 +40,11 @@ export default function Login() {
                         setError("Invalid Username or Password.")
                     }
                     else {
-                        if (response.data.status === "active") {
                             console.log(response)
                             localStorage.setItem("userId", response.data.userId)
                             localStorage.setItem("role", response.data.roleName)
                             localStorage.setItem("jwt", response.data.token)
                             navigate("/")
-                        }
-                        else {
-                            setError("User is not active, Please check your email to active your account.")
-                            setTimeout(() => {
-                                setError(null)
-                            }, 5000);
-                        }
                     }
                 }).catch(e => {
                     setError("Enter valid Email or Password")

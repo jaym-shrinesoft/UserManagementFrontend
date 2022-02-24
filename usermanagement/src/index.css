@@ -41,3 +41,7 @@ tr{
 .modal-header{
   align-items: baseline !important;
 }
+
+.heading-title{
+  cursor: pointer;
+}
